@@ -46,7 +46,7 @@ async def bussiness_access_pets(accessModel: AccessModel):
                     return ResultModel(code="-1", message="Error Server. Check Log") 
     
 
-async def bussiness_add_new_user_pet(logger: logging, user: UserPetModel):
+async def bussiness_add_new_user_pet(user: UserPetModel):
     try:
         tempo_data = UserPetsInfo(
             email = user.email,
@@ -70,7 +70,7 @@ async def bussiness_add_new_user_pet(logger: logging, user: UserPetModel):
     
 
 
-async def bussiness_add_pet(logger: logging, new_pet: PetModel):
+async def bussiness_add_pet(new_pet: PetModel):
     try:
         tempo_data = PetsInfo(
             name= new_pet.name,

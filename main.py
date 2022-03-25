@@ -1,20 +1,8 @@
 # python
-from email import message
-import json
-from turtle import title
-from uuid import UUID
-from datetime import date
-from datetime import datetime
-from typing import Optional, List
 
 
 import logging
 import logging.config
-
-# pydantic
-from pydantic import BaseModel
-from pydantic import EmailStr
-from pydantic import Field
 
 # FastAPI
 from fastapi import FastAPI
@@ -55,7 +43,7 @@ async def show_all_pets():
     tags=["Pets"]
     )
 async def add_pet( new_pet: PetModel = Body(...)):
-    return await bussiness_add_pet(logger, new_pet)
+    return await bussiness_add_pet(new_pet)
 
 
 @app.post(
@@ -65,7 +53,7 @@ async def add_pet( new_pet: PetModel = Body(...)):
     tags=["Pets"]
     )
 async def add_new_user_pet(new_user: UserPetModel = Body(...)):
-    return await bussiness_add_new_user_pet(logger, new_user)
+    return await bussiness_add_new_user_pet(new_user)
 
 @app.post(
     path='/access_pet',
