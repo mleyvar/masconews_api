@@ -24,9 +24,9 @@ async def bussiness_show_all_pets():
 
 async def bussiness_access_pets(accessModel: AccessModel):
     try:
-        print(accessModel)
+        #print(accessModel)
         data = session.query(UserPetsInfo).filter(UserPetsInfo.email == accessModel.email).one()
-        print(data)
+        #print(data)
         if data is  None:
             return ResultAccessModel(code="-1", message="User or password invalid", user= getUserPetModalDefault()) 
         else:
@@ -38,7 +38,7 @@ async def bussiness_access_pets(accessModel: AccessModel):
  
     except Exception as e:
                 #logger.info(e.detail)
-                print(e)
+                #print(e)
                 session.rollback()
                 if "No row was found" in str(e):
                     return ResultModel(code="-1", message="Not exist the row") 
@@ -63,7 +63,7 @@ async def bussiness_add_new_user_pet(logger: logging, user: UserPetModel):
         return ResultModel(code="0", message="User inserted") 
     except Exception as e:
             #logger.info(e.detail)
-            print(e)
+            #print(e)
             session.rollback()
 
             return ResultModel(code="-1", message="Error Server. Check Log") 
@@ -86,7 +86,7 @@ async def bussiness_add_pet(logger: logging, new_pet: PetModel):
 
         return ResultModel(code="0", message="Pet inserted") 
     except Exception as e:
-            print(e)
+            #print(e)
             session.rollback()
 
             return ResultModel(code="-1", message="Error Server. Check Log") 

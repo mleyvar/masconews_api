@@ -36,7 +36,7 @@ async def bussiness_add_new(new_new: NewsModel):
 
         return ResultModel(code="0", message="New inserted") 
     except Exception as e:
-            print(e)
+            #print(e)
             session.rollback()
 
             return ResultModel(code="-1", message="Error Server. Check Log") 
@@ -62,7 +62,7 @@ async def bussiness_add_new_user_news(user: UserNewsModel):
         return ResultModel(code="0", message="User inserted") 
     except Exception as e:
             #logger.info(e.detail)
-            print(e)
+            #print(e)
             session.rollback()
 
             return ResultModel(code="-1", message="Error Server. Check Log") 
@@ -73,9 +73,9 @@ async def bussiness_add_new_user_news(user: UserNewsModel):
 
 async def bussiness_access_news(accessModel: AccessModel):
     try:
-        print(accessModel)
+        #print(accessModel)
         data = session.query(UserNewsInfo).filter(UserNewsInfo.email == accessModel.email).one()
-        print(data)
+        #print(data)
         if data is  None:
             return ResultAccessModel(code="-1", message="User or password invalid", user= getUserNewModalDefault()) 
         else:
@@ -87,7 +87,7 @@ async def bussiness_access_news(accessModel: AccessModel):
  
     except Exception as e:
                 #logger.info(e.detail)
-                print(e)
+                #print(e)
                 session.rollback()
                 if "No row was found" in str(e):
                     return ResultModel(code="-1", message="Not exist the row") 
