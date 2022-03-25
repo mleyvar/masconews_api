@@ -1,6 +1,7 @@
 # python
 from email import message
 import json
+from turtle import title
 from uuid import UUID
 from datetime import date
 from datetime import datetime
@@ -20,132 +21,99 @@ from fastapi import FastAPI
 from fastapi import status
 from fastapi import Body
 
+from bussiness.pets import bussiness_access_pets, bussiness_add_new_user_pet, bussiness_add_pet, bussiness_show_all_pets
+from bussiness.news import bussiness_access_news, bussiness_add_new, bussiness_add_new_user_news, bussiness_show_all_news
+from model.AccessModel import AccessModel
+from model.NewsModel import NewsModel
+from model.PetModel import PetModel
+from model.UserPetModel import UserPetModel
+
 logger = logging.getLogger(__name__)
 app = FastAPI(debug=True)
 
-# Models
-class UserBase(BaseModel):
-    user_id: UUID = Field(...)
-    email: EmailStr = Field(...)
-
-class UserLogin(UserBase):
-    password: str = Field (..., min_length=8)
-
-class User(UserBase):
-    password: str = Field (..., min_length=8)
-    first_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-        )
-    last_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-        )
-    birth_date: Optional[date] = Field(default=None)    
-
-class UserRegisterRecipe(BaseModel):
-    first_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-        )
-    last_name: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-        )
-    email: str = Field(
-        ...,
-        min_length=1,
-        max_length=50
-        )
-    password: str = Field (..., min_length=8)
-    birth_date: Optional[date] = Field(default=None)    
-
-
-class UserRegister(User):
-       password: str = Field (..., min_length=8)
-
-class Tweet(BaseModel):
-    tweet_id: UUID = Field(...)
-    content: str = Field(
-        ..., 
-        max_length=253,
-        min_length=1
-        )
-    created_at: datetime = Field(default=datetime.now())    
-    updated_at: Optional[datetime] = Field(default=None)
-    by: User = Field(...)    
-    
-
-class Recipe(BaseModel):
-    recipe_id: UUID = Field(...)
-    title: str = Field(
-        ..., 
-        max_length=500,
-        min_length=1
-        )
-    detail: str = Field(
-        ..., 
-        max_length=1250,
-        min_length=1
-        )
-    image_url: str = Field(
-        ..., 
-        min_length=1
-        )
-    author: str = Field(
-        ..., 
-        min_length=1
-        )
-        
-    created_at: datetime = Field(default=datetime.now())    
-    
-class UserRecipe(BaseModel):
-    user_id: UUID = Field(...)
-    user: str = Field(
-        ..., 
-        max_length=25,
-        min_length=1
-        )
-    password: str = Field(
-        ..., 
-        max_length=25,
-        min_length=1
-        )
-    created_at: datetime = Field(default=datetime.now())    
-
-
-    
-class Result(BaseModel):
-    code: str = Field(
-        ..., 
-        max_length=5,
-        min_length=1
-        )
-    message: str = Field(
-        ..., 
-        max_length=50,
-        min_length=1
-        )
-    
-class AccessResponse(BaseModel):
-    result: Result = Field(...)
-
-
 # path operations
 
+# Root
+@app.get("/")
+def read_root():
+    return {"message": "welcome to Service by Marco Polo Leyva!"}
 
-### Show all users
+### Show all pets
 @app.get(
     path='/pets',
-    response_model=List[User],
     status_code=status.HTTP_200_OK,
     summary="Show all Pets",
     tags=["Pets"]
     )
-def show_all_pets():
-    return {"Hello": "World"}
+async def show_all_pets():
+    return await bussiness_show_all_pets()
 
+@app.post(
+    path='/pet',
+    status_code=status.HTTP_200_OK,
+    summary="Add new Pet",
+    tags=["Pets"]
+    )
+async def add_pet( new_pet: PetModel = Body(...)):
+    return await bussiness_add_pet(logger, new_pet)
+
+
+@app.post(
+    path='/register_user_pet',
+    status_code=status.HTTP_200_OK,
+    summary="Add new User",
+    tags=["Pets"]
+    )
+async def add_new_user_pet(new_user: UserPetModel = Body(...)):
+    return await bussiness_add_new_user_pet(logger, new_user)
+
+@app.post(
+    path='/access_pet',
+    status_code=status.HTTP_200_OK,
+    summary="Access user pet",
+    tags=["Pets"]
+    )
+async def access_pets(accessModel: AccessModel= Body(...)):
+    return await bussiness_access_pets(accessModel)
+
+### *********************************   NEWS
+
+
+### Show all news
+@app.get(
+    path='/news',
+    status_code=status.HTTP_200_OK,
+    summary="Show all news",
+    tags=["News"]
+    )
+async def show_all_news():
+    return await bussiness_show_all_news()
+
+@app.post(
+    path='/news',
+    status_code=status.HTTP_200_OK,
+    summary="Add new News",
+    tags=["News"]
+    )
+async def add_news( add_new: NewsModel = Body(...)):
+    return await bussiness_add_new(add_new)
+
+
+@app.post(
+    path='/register_user_new',
+    status_code=status.HTTP_200_OK,
+    summary="Add new User",
+    tags=["News"]
+    )
+async def add_new_user_news(new_user: UserPetModel = Body(...)):
+    return await bussiness_add_new_user_news( new_user)
+
+
+@app.post(
+    path='/access_news',
+    status_code=status.HTTP_200_OK,
+    summary="Access user news",
+    tags=["News"]
+    )
+async def access_news(accessModel: AccessModel= Body(...)):
+    return await bussiness_access_news(accessModel)    

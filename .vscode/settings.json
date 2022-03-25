@@ -1,0 +1,11 @@
+{
+    "files.exclude": {
+        "__pycache__/": true,
+        "bussiness/__pycache__/": true,
+        "model/__pycache__/": true
+    },
+    "python.analysis.extraPaths": [
+        "./persistence"
+    ],
+    "editor.scrollbar.horizontalScrollbarSize": 24
+}
