@@ -47,7 +47,7 @@ async def bussiness_add_new(new_new: NewsModel):
 
         return ResultModel(code="0", message="New inserted") 
     except Exception as e:
-            #print(e)
+            print(e)
             session.rollback()
 
             return ResultModel(code="-1", message="Error Server. Check Log") 
