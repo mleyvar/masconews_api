@@ -3,9 +3,12 @@
 
 import logging
 import logging.config
+from typing import Optional
+import uuid
+
 
 # FastAPI
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from fastapi import status
 from fastapi import Body
 
@@ -15,9 +18,13 @@ from model.AccessModel import AccessModel
 from model.NewsModel import NewsModel
 from model.PetModel import PetModel
 from model.UserPetModel import UserPetModel
+from fastapi.staticfiles import StaticFiles
+
 
 logger = logging.getLogger(__name__)
 app = FastAPI(debug=True)
+app.mount("/images", StaticFiles(directory="images"), name="images")
+
 
 # path operations
 
@@ -105,3 +112,35 @@ async def add_new_user_news(new_user: UserPetModel = Body(...)):
     )
 async def access_news(accessModel: AccessModel= Body(...)):
     return await bussiness_access_news(accessModel)    
+
+
+
+
+@app.post(
+    path="/post-image",
+    status_code=status.HTTP_200_OK,
+    tags=["Instagram"]
+)
+def post_image(
+    image: UploadFile = File(...)
+):
+
+   if (image == None):
+        return {"result":"no file exist"}
+   else: 
+        name = str(uuid.uuid4()) + ".jpeg" 
+        print(image.file)
+        print(image.filename)
+
+        print(name)
+        open(f'images/{name}',"wb").write(image.file.read())
+    # with open(f'images/{image.filename}', "wb") as buffer:
+
+
+        return {
+            "result": "Success",
+            "filename": name,
+            "format": image.content_type,
+            "size(kb)": round(len(image.file.read())/1024, ndigits=2)
+        }
+

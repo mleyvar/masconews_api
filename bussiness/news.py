@@ -1,4 +1,8 @@
 
+import base64
+from typing import Optional
+from fastapi import File, UploadFile
+from bussiness.config.constants import BASE_PATH_IMAGE
 from model.AccessModel import AccessModel
 from model.NewsModel import NewsModel
 from model.PetModel import PetModel
@@ -12,7 +16,7 @@ from sqlalchemy.orm import sessionmaker
 from persistence.database import session
 from schema.user_news_info import UserNewsInfo
 
-
+import uuid
 
 async def bussiness_show_all_news():
     data = session.query(NewsInfo).all()
@@ -23,20 +27,36 @@ async def bussiness_show_all_news():
 
 async def bussiness_add_new(new_new: NewsModel):
     try:
+        print("image 1:")
+        print(new_new.image)
+        decoded_image_data = base64.decodebytes(new_new.image.encode('utf-8'))
+        print("image 2:")
+
+        name = str(uuid.uuid4()) + ".jpeg" 
+        print("image 3:")
+        open(f'images/{name}',"wb").write(decoded_image_data)
+        print("image 4:")
+#        open(f'images/{name}',"wb").write(new_new.image.file.read())
+
         tempo_data = NewsInfo(
             title= new_new.title,
             new = new_new.news,
-           
+            url_image = BASE_PATH_IMAGE + name
         )
+        print("image 5:")
         
         session.add(tempo_data)
+        print("image 6:")
         session.flush()
+        print("image 7:")
         session.commit()
+        print("image 8:")
         session.close()
+
 
         return ResultModel(code="0", message="New inserted") 
     except Exception as e:
-            #print(e)
+            print(e)
             session.rollback()
 
             return ResultModel(code="-1", message="Error Server. Check Log") 
