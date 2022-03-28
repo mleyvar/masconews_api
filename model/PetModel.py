@@ -1,4 +1,5 @@
 #pydantic
+from typing import Optional
 from pydantic import BaseModel, EmailStr
 from pydantic import Field
 from pydantic import EmailStr
@@ -25,3 +26,4 @@ class PetModel(BaseModel):
         max_length=500,
         min_length=1
         )
+    image: Optional[str] = Field(default=None)  

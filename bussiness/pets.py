@@ -1,8 +1,11 @@
 
+import base64
 import email
 import logging
 from operator import contains
 from unicodedata import name
+import uuid
+from bussiness.config.constants import BASE_PATH_IMAGE
 from model.AccessModel import AccessModel
 from model.PetModel import PetModel
 from model.ResultAccessModel import ResultAccessModel
@@ -72,11 +75,20 @@ async def bussiness_add_new_user_pet(user: UserPetModel):
 
 async def bussiness_add_pet(new_pet: PetModel):
     try:
+
+        decoded_image_data = base64.decodebytes(new_pet.image.encode('utf-8'))
+
+        name = str(uuid.uuid4()) + ".jpeg" 
+        open(f'images/{name}',"wb").write(decoded_image_data)
+#        open(f'images/{name}',"wb").write(new_new.image.file.read())
+
+
         tempo_data = PetsInfo(
             name= new_pet.name,
             type = new_pet.type,
             raza = new_pet.raza,
             obs = new_pet.obs,
+            url_image = BASE_PATH_IMAGE + name
         )
         
         session.add(tempo_data)
