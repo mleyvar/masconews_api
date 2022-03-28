@@ -27,15 +27,10 @@ async def bussiness_show_all_news():
 
 async def bussiness_add_new(new_new: NewsModel):
     try:
-        print("image 1:")
-        print(new_new.image)
         decoded_image_data = base64.decodebytes(new_new.image.encode('utf-8'))
-        print("image 2:")
 
         name = str(uuid.uuid4()) + ".jpeg" 
-        print("image 3:")
         open(f'images/{name}',"wb").write(decoded_image_data)
-        print("image 4:")
 #        open(f'images/{name}',"wb").write(new_new.image.file.read())
 
         tempo_data = NewsInfo(
@@ -43,20 +38,16 @@ async def bussiness_add_new(new_new: NewsModel):
             new = new_new.news,
             url_image = BASE_PATH_IMAGE + name
         )
-        print("image 5:")
         
         session.add(tempo_data)
-        print("image 6:")
         session.flush()
-        print("image 7:")
         session.commit()
-        print("image 8:")
         session.close()
 
 
         return ResultModel(code="0", message="New inserted") 
     except Exception as e:
-            print(e)
+            #print(e)
             session.rollback()
 
             return ResultModel(code="-1", message="Error Server. Check Log") 
