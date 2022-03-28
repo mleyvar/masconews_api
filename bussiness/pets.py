@@ -98,7 +98,7 @@ async def bussiness_add_pet(new_pet: PetModel):
 
         return ResultModel(code="0", message="Pet inserted") 
     except Exception as e:
-            #print(e)
+            print(e)
             session.rollback()
 
             return ResultModel(code="-1", message="Error Server. Check Log") 
