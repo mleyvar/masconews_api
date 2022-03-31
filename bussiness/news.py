@@ -23,6 +23,10 @@ async def bussiness_show_all_news():
 
     return data
 
+async def bussiness_show_all_users_news():
+    data = session.query(UserNewsInfo).all()
+
+    return data
 
 
 async def bussiness_add_new(new_new: NewsModel):

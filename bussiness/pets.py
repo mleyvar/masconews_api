@@ -24,6 +24,10 @@ async def bussiness_show_all_pets():
 
     return data
 
+async def bussiness_show_all_user_pets():
+    data = session.query(UserPetsInfo).all()
+
+    return data
 
 async def bussiness_access_pets(accessModel: AccessModel):
     try:

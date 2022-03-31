@@ -12,8 +12,8 @@ from fastapi import FastAPI, File, UploadFile
 from fastapi import status
 from fastapi import Body
 
-from bussiness.pets import bussiness_access_pets, bussiness_add_new_user_pet, bussiness_add_pet, bussiness_show_all_pets
-from bussiness.news import bussiness_access_news, bussiness_add_new, bussiness_add_new_user_news, bussiness_show_all_news
+from bussiness.pets import bussiness_access_pets, bussiness_add_new_user_pet, bussiness_add_pet, bussiness_show_all_pets, bussiness_show_all_user_pets
+from bussiness.news import bussiness_access_news, bussiness_add_new, bussiness_add_new_user_news, bussiness_show_all_news, bussiness_show_all_users_news
 from model.AccessModel import AccessModel
 from model.NewsModel import NewsModel
 from model.PetModel import PetModel
@@ -42,6 +42,15 @@ def read_root():
     )
 async def show_all_pets():
     return await bussiness_show_all_pets()
+
+@app.get(
+    path='/users_pet',
+    status_code=status.HTTP_200_OK,
+    summary="Show all Users from Pets",
+    tags=["Pets"]
+    )
+async def show_all_user_pets():
+    return await bussiness_show_all_user_pets()
 
 @app.post(
     path='/pet',
@@ -83,6 +92,15 @@ async def access_pets(accessModel: AccessModel= Body(...)):
     )
 async def show_all_news():
     return await bussiness_show_all_news()
+
+@app.get(
+    path='/users_news',
+    status_code=status.HTTP_200_OK,
+    summary="Show all users from news",
+    tags=["News"]
+    )
+async def show_all_users_news():
+    return await bussiness_show_all_users_news()
 
 @app.post(
     path='/news',
