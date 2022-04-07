@@ -20,19 +20,34 @@ from schema.user_pets_info import  UserPetsInfo
 
 
 async def bussiness_show_all_pets():
-    data = session.query(PetsInfo).all()
+    #data = session.query(PetsInfo).all()
+    data = []
+    data.append(PetsInfo(id = 1, name= "Mascota 1", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 2, name= "Mascota 2", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 3, name= "Mascota 3", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 4, name= "Mascota 4", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 5, name= "Mascota 5", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 6, name= "Mascota 6", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 7, name= "Mascota 7", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 8, name= "Mascota 8", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 9, name= "Mascota 9", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+    data.append(PetsInfo(id = 10, name= "Mascota 10", type="Perro", raza="Buldog", obs="detalle de la Mascota", url_image= BASE_PATH_IMAGE + "2a40c30a-fee8-4363-b1f5-394e5059a868.jpeg"))
+
 
     return data
 
 async def bussiness_show_all_user_pets():
-    data = session.query(UserPetsInfo).all()
+    #data = session.query(UserPetsInfo).all()
+    data = []
+    data.append(UserPetsInfo(email="sergio@admin.com", name="Sergio", last_name="El de Dulce", password="...."))
 
     return data
 
 async def bussiness_access_pets(accessModel: AccessModel):
     try:
         #print(accessModel)
-        data = session.query(UserPetsInfo).filter(UserPetsInfo.email == accessModel.email).one()
+        #data = session.query(UserPetsInfo).filter(UserPetsInfo.email == accessModel.email).one()
+        data = UserPetsInfo(email= "sergio@admin.com", name="Sergio", last_name="El de Dulce", password ="Password123")
         #print(data)
         if data is  None:
             return ResultAccessModel(code="-1", message="User or password invalid", user= getUserPetModalDefault()) 
@@ -62,10 +77,10 @@ async def bussiness_add_new_user_pet(user: UserPetModel):
             password = user.password
         )
         
-        session.add(tempo_data)
-        session.flush()
-        session.commit()
-        session.close()
+        #session.add(tempo_data)
+        #session.flush()
+        #session.commit()
+        #session.close()
 
         return ResultModel(code="0", message="User inserted") 
     except Exception as e:
@@ -95,10 +110,10 @@ async def bussiness_add_pet(new_pet: PetModel):
             url_image = BASE_PATH_IMAGE + name
         )
         
-        session.add(tempo_data)
-        session.flush()
-        session.commit()
-        session.close()
+        #session.add(tempo_data)
+        #session.flush()
+        #session.commit()
+        #session.close()
 
         return ResultModel(code="0", message="Pet inserted") 
     except Exception as e:
