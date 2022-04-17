@@ -5,14 +5,15 @@ import logging
 import logging.config
 from typing import Optional
 import uuid
-
+from fastapi.middleware.cors import CORSMiddleware
 
 # FastAPI
 from fastapi import FastAPI, File, UploadFile
 from fastapi import status
 from fastapi import Body
 
-from bussiness.pets import bussiness_access_pets, bussiness_add_new_user_pet, bussiness_add_pet, bussiness_show_all_pets, bussiness_show_all_user_pets
+from bussiness.pets import bussiness_access_pets, bussiness_add_new_user_pet, bussiness_add_pet, \
+    bussiness_show_all_pets, bussiness_show_all_user_pets, bussiness_access
 from bussiness.news import bussiness_access_news, bussiness_add_new, bussiness_add_new_user_news, bussiness_show_all_news, bussiness_show_all_users_news
 from model.AccessModel import AccessModel
 from model.NewsModel import NewsModel
@@ -26,12 +27,35 @@ app = FastAPI(debug=True)
 app.mount("/images", StaticFiles(directory="images"), name="images")
 
 
+origins = [
+    "http://localhost",
+    "http://localhost:3000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 # path operations
 
 # Root
 @app.get("/")
 def read_root():
     return {"message": "welcome to Service by Marco Polo Leyva!"}
+
+@app.post(
+    path='/auth/access',
+    status_code=status.HTTP_200_OK,
+    summary="Access "
+    )
+async def access(accessModel: AccessModel= Body(...)):
+    return await bussiness_access(accessModel)
 
 ### Show all pets
 @app.get(

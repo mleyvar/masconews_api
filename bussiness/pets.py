@@ -43,6 +43,34 @@ async def bussiness_show_all_user_pets():
 
     return data
 
+
+async def bussiness_access(accessModel: AccessModel):
+    try:
+        # print(accessModel)
+        # data = session.query(UserPetsInfo).filter(UserPetsInfo.email == accessModel.email).one()
+        data = UserPetsInfo(email="sergio@bancobase.com", name="Sergio", last_name="Martinez", password="Password123")
+        # print(data)
+        if data is None:
+            return ResultAccessModel(code="-1", message="User or password invalid", user=getUserPetModalDefault())
+        else:
+            if data.password == accessModel.password:
+                return ResultAccessModel(code="0", message="successfull", user=UserPetModel(email=data.email,
+                                                                                            name=data.name,
+                                                                                            last_name=data.last_name,
+                                                                                            password="...."))
+            else:
+                return ResultAccessModel(code="-1", message="User or password invalid", user=getUserPetModalDefault())
+
+    except Exception as e:
+        # logger.info(e.detail)
+        # print(e)
+        session.rollback()
+        if "No row was found" in str(e):
+            return ResultModel(code="-1", message="Not exist the row")
+        else:
+            return ResultModel(code="-1", message="Error Server. Check Log")
+
+
 async def bussiness_access_pets(accessModel: AccessModel):
     try:
         #print(accessModel)
